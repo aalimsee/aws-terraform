@@ -1,12 +1,17 @@
-provider "aws" {
-  region = "us-east-1"
+# eip/main.tf
+variable "allocation_id" {
+  type = string
 }
 
-resource "aws_eip" "eip" {
-  vpc = true
+variable "instance_id" {
+  type = string
 }
 
-resource "aws_eip_association" "eip" {
-  allocation_id = aws_eip.eip.id
-  instance_id   = aws_elb.eip.id
+resource "aws_eip" "this" {
+  allocation_id = var.allocation_id
+  instance_id   = var.module.ec2_instance.instance_id
+}
+
+output "allocation_id" {
+  value = aws_eip.this.allocation_id
 }
